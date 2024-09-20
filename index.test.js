@@ -27,6 +27,10 @@ describe("Restaurant,Menu and Item Models", () => {
     const createMenu = await Menu.create(seedMenu[0]);
     expect(createMenu).toEqual(expect.objectContaining(seedMenu[0]));
   });
+  test("can creat Item instance", async () => {
+    const item = await Item.create(seedItem[0]);
+    expect(item.name).toBe(seedItem[0].name);
+  });
 
   test("can find Restaurants", async () => {
     // TODO - write testconst [foundUser] = await User.findAll();
@@ -35,10 +39,6 @@ describe("Restaurant,Menu and Item Models", () => {
     expect(Allrestaurants[0].name).toEqual("AppleBees");
   });
   // test to check Item instance can be created
-  test("can creat Item instance", async () => {
-    const item = await Item.create(seedItem[0]);
-    expect(item.name).toBe(seedItem[0].name);
-  });
 
   test("can find Menus", async () => {
     // TODO - write test
@@ -48,6 +48,15 @@ describe("Restaurant,Menu and Item Models", () => {
     expect(menu[0].title).toEqual("Breakfast");
   });
 
+  test("can find Items", async () => {
+    const findAllItems = await Item.findAll();
+    console.log(findAllItems[0]);
+    const firstItem= await findAllItems[0]
+    const firstItemName= await firstItem.name
+    
+    expect(findAllItems.length).toBeGreaterThan(0);
+    expect(firstItemName).toBe(seedItem[0].name);
+  });
   test("can delete Restaurants", async () => {
     // TODO - write test
     const deletedRestaurant = await Restaurant.destroy({
