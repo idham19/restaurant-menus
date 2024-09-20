@@ -51,9 +51,9 @@ describe("Restaurant,Menu and Item Models", () => {
   test("can find Items", async () => {
     const findAllItems = await Item.findAll();
     console.log(findAllItems[0]);
-    const firstItem= await findAllItems[0]
-    const firstItemName= await firstItem.name
-    
+    const firstItem = await findAllItems[0];
+    const firstItemName = await firstItem.name;
+
     expect(findAllItems.length).toBeGreaterThan(0);
     expect(firstItemName).toBe(seedItem[0].name);
   });
@@ -65,13 +65,19 @@ describe("Restaurant,Menu and Item Models", () => {
     const restaurant = await Restaurant.findByPk(1);
     expect(restaurant).toBeNull();
   });
-});
-// describe("Item Model test", async () => {
-//   beforeAll(async () => {
-//     // the 'sync' method will create tables based on the model class
-//     // by setting 'force:true' the tables are recreated each time the
-//     // test suite is run
-//     await sequelize.sync({ force: true });
-//   });
+  test("Menu can many Items", async () => {
+    const item1 = await Item.create(seedItem[0]);
+    const item2 = await Item.create(seedItem[1]);
+    const menu = await Menu.create(seedMenu[0]);
 
-// });
+    await menu.addItem(item1);
+    await menu.addItem(item2);
+
+    const foundMenu = await Menu.findOne({
+      where: { id: menu.id },
+      include: Item,
+    });
+    expect(foundMenu.Items[0].name).toBe(item1.name);
+    expect(foundMenu.Items[1].name).toBe(item2.name);
+  });
+});
