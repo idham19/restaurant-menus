@@ -1,8 +1,9 @@
 const { sequelize } = require("./db");
 const { Restaurant, Menu } = require("./models/index");
-const { seedRestaurant, seedMenu } = require("./seedData");
+const { Item } = require("./models/Item");
+const { seedRestaurant, seedMenu, seedItem } = require("./seedData");
 
-describe("Restaurant and Menu Models", () => {
+describe("Restaurant,Menu and Item Models", () => {
   /**
    * Runs the code prior to all tests
    */
@@ -29,25 +30,39 @@ describe("Restaurant and Menu Models", () => {
 
   test("can find Restaurants", async () => {
     // TODO - write testconst [foundUser] = await User.findAll();
-    const Allrestaurants= await Restaurant.findAll();
-    expect((Allrestaurants).length).toBeGreaterThan(0);
-    expect(Allrestaurants[0].name).toEqual("AppleBees")
+    const Allrestaurants = await Restaurant.findAll();
+    expect(Allrestaurants.length).toBeGreaterThan(0);
+    expect(Allrestaurants[0].name).toEqual("AppleBees");
+  });
+  // test to check Item instance can be created
+  test("can creat Item instance", async () => {
+    const item = await Item.create(seedItem[0]);
+    expect(item.name).toBe(seedItem[0].name);
   });
 
   test("can find Menus", async () => {
     // TODO - write test
-    const menu =await  Menu.findAll()
+    const menu = await Menu.findAll();
 
-    expect((menu).length).toBeGreaterThan(0);
-    expect(menu[0].title).toEqual("Breakfast")
+    expect(menu.length).toBeGreaterThan(0);
+    expect(menu[0].title).toEqual("Breakfast");
   });
 
   test("can delete Restaurants", async () => {
     // TODO - write test
-    const deletedRestaurant= await Restaurant.destroy({
-      where:{id:1}
-    })
+    const deletedRestaurant = await Restaurant.destroy({
+      where: { id: 1 },
+    });
     const restaurant = await Restaurant.findByPk(1);
-    expect(restaurant).toBeNull()
+    expect(restaurant).toBeNull();
   });
 });
+// describe("Item Model test", async () => {
+//   beforeAll(async () => {
+//     // the 'sync' method will create tables based on the model class
+//     // by setting 'force:true' the tables are recreated each time the
+//     // test suite is run
+//     await sequelize.sync({ force: true });
+//   });
+
+// });
